@@ -11,7 +11,8 @@ public class App {
     public static void main(String[] args) {
 
         //Specifies type of driver and location
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Daniel\\Dropbox\\Code\\Resources\\Drivers\\chromedriver.exe");
+
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\danie\\Dropbox\\Code\\Resources\\Drivers\\chromedriver.exe");
 
         //Creates an instance of a chrome webdrivver
         WebDriver driver = new ChromeDriver();
@@ -25,9 +26,9 @@ public class App {
         //open browser with desired URL
         driver.get("https://www.google.com");
 
-        driver.get("https://.no");
+        driver.get("https://www.vg.no");
 
         //closing the browser
-        driver.close();
+        //driver.close();
     }
 }
