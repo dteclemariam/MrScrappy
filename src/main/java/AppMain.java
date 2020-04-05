@@ -1,18 +1,18 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 
-public class App {
-
-    String y = "Test";
-
+public class MrScrapperMain {
     public static void main(String[] args) {
+        Controller controller = new Controller();
+        AppData data = new AppData();
+        data.printWebpages();
 
-        //Specifies type of driver and location
-
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\danie\\Dropbox\\Code\\Resources\\Drivers\\chromedriver.exe");
+        //Setting driver executable
+        System.setProperty("webdriver.chrome.driver", "C:\\Resources\\Drivers\\chromedriver.exe");
 
         //Creates an instance of a chrome webdrivver
         WebDriver driver = new ChromeDriver();
@@ -26,9 +26,13 @@ public class App {
         //open browser with desired URL
         driver.get("https://www.google.com");
 
+        controller.randomWaitTime();
+
         driver.get("https://www.vg.no");
 
+        controller.randomWaitTime();
+
         //closing the browser
-        //driver.close();
+        driver.close();
     }
 }
