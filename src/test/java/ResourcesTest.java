@@ -1,62 +1,78 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 
 @DisplayName("Resources should:")
 class ResourcesTest {
 
     Resources resources = new Resources();
 
-    @DisplayName("Have paths that are not empty")
+    @DisplayName("Webdriver and webpages.txt exist and is not empty")
     @Test
-    void pathsNotEmpty(){
+    void filesExist() {
+        Path webpagesFilePath = Paths.get("C:\\Resources\\Data\\webpages.txt");
+        Path webdriverFilePath = Paths.get("C:\\Resources\\Drivers\\chromedriver.exe");
+
         assertAll(
-                () -> assertFalse(resources.getWebpagesFilePath().toString().isEmpty()),
-                () -> assertFalse(resources.getWebdriverFilePath().toString().isEmpty())
+                () -> assertTrue(resources.fileNotEmpty(webpagesFilePath)),
+                () -> assertTrue(resources.fileNotEmpty(webdriverFilePath))
         );
     }
 
-    @DisplayName("Files exist and is not empty")
+    @DisplayName("Throws error if files doesn't exist or is empty")
     @Test
-    void filesNotEmpty(){
-        assertAll(
-                () ->assertTrue(resources.fileNotEmpty(resources.getWebpagesFilePath())),
-                () ->assertTrue(resources.fileNotEmpty(resources.getWebdriverFilePath()))
-        );
+    void throwsExceptionIfFilesNotFoundOrIsEmpty() {
+        try {
+            Path wrongPath = Paths.get("C:\\Resources\\Data\\wwwebpages.txt");
+            Throwable errorFileDoesntExist = assertThrows(RuntimeException.class,
+                    () -> resources.fileNotEmpty(wrongPath));
+
+            File tempEmptyFile = File.createTempFile("tempEmptyFile", "txt");
+            Path pathToEmptyFile = Paths.get(tempEmptyFile.getPath());
+            Throwable errorFileIsEmpty = assertThrows(RuntimeException.class,
+                    () -> resources.fileNotEmpty(pathToEmptyFile));
+
+            assertAll(
+                    () -> assertEquals("Error: File at " + wrongPath.toString() + " is empty, or doesn't exist", errorFileDoesntExist.getMessage()),
+                    () -> assertEquals("Error: File at " + pathToEmptyFile.toString() + " is empty, or doesn't exist", errorFileIsEmpty.getMessage())
+            );
+
+            try {
+                tempEmptyFile.delete();
+            } catch (SecurityException e) {
+                System.out.println(e.getMessage());
+            }
+            assertFalse(tempEmptyFile.exists());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Something went wrong, couldn't delete tempEmptyFile");
+        }
     }
 
-    @DisplayName("Throws error if files doesn't exist")
+    @DisplayName("Returns a webdriver to calling method")
     @Test
-    void throwsExceptionIfFilesNotFound(){
-        resources.getWebpages();
+    void returnsWebDriverInstance() {
+        Path webdriverFilePath = Paths.get("C:\\Resources\\Drivers\\chromedriver.exe");
 
+        WebDriver driver = resources.getWebDriver(webdriverFilePath);
+        assertNotNull(driver);
+        driver.close();
     }
 
-
-    @DisplayName("Files exist")
+    @DisplayName("Return array with webpages to calling method")
     @Test
-    void checkFilesExist() {
-
-        //File webpages = new File("C:\\Resources\\Data\\webpages.txt");
-        File webpages = new File(resources.getWebpagesFilePath().toString());
-        File webdriver = new File(resources.getWebpagesFilePath().toString());
-        assertAll(
-                () -> assertTrue(webpages.exists()),
-                () -> assertTrue(webdriver.exists())
-        );
+    void returnArrayWithWebpages() {
+        Path webpagesFilePath = Paths.get("C:\\Resources\\Data\\webpages.txt");
+        ArrayList webpages = new ArrayList<String>();
+        webpages = resources.getWebpages(webpagesFilePath);
+        assertNotNull(webpages);
     }
-
-
-    @DisplayName("File doesn't exist")
-    @Test
-    void catchExceptionIfFileNotFound() {
-
-    }
-
 }
