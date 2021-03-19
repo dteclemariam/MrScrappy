@@ -1,28 +1,51 @@
-import java.util.Random;
+import org.openqa.selenium.WebDriver;
+
+
 import java.util.concurrent.TimeUnit;
 
 public class Controller {
-    //creates instance of other classes
-    AppVariables appVariables = new AppVariables();
-    Resources data = new Resources();
 
+    /*** class variables ***/
+            /*** objects ***/
+    private UserInterface ui = new UserInterface();
+    private AppVariable appVariable = new AppVariable();
+    private Resources resources = new Resources();
+    private WebDriver driver = null;
+    private LogIn logIn = new LogIn();
 
-    //creates instance of Random
-    Random random = new Random();
+    /*** class methods ***/
+    protected void start(){
+        ui.initializing();
+        driver = resources.getWebDriver();
+        appVariable.randomWaitTime();
+        driver = resources.getWebDriver();
+        driver.get(resources.getWebpage());
+        //logIn.logIn(driver);
+        //driver.get("https://classic.nordnet.no/mux/login/startNO.html?clearEndpoint=0&intent=shareville");
+        appVariable.randomWaitTime();
+        stopApp();
+      }
 
-    //Return a random number between minimumMilliseconds and maximumilliseconds
-    protected int randomNumber(){
-        return random.nextInt((appVariables.maximumMilliseconds - appVariables.minimumMilliseconds) + 1)
-                + appVariables.minimumMilliseconds;
+      protected void stopApp(){
+          //resources.closeWebdriver(driver);
+          exit();
+      }
 
-    }
+      //Make a method that checks if the page is up
 
-    //Runs a random wait time
-    protected void randomWaitTime(){
+    //Method for exiting the program
+    protected void exit() {
+        System.out.print("The application is closing");
+        //10 sec delay on close
+        int seconds = 10;
         try {
-            TimeUnit.MILLISECONDS.sleep(randomNumber());
+            for (int i = 0; i < seconds; i++) {
+                TimeUnit.SECONDS.sleep(1);
+                System.out.print(".");
+            }
         }catch (InterruptedException ie){
             Thread.currentThread().interrupt();
         }
+        System.exit(0);
     }
 }
