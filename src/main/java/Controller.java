@@ -18,7 +18,6 @@ public class Controller {
         ui.initializing();
         driver = resources.getWebDriver();
         appVariable.randomWaitTime();
-        driver = resources.getWebDriver();
         driver.get(resources.getWebpage());
         //logIn.logIn(driver);
         //driver.get("https://classic.nordnet.no/mux/login/startNO.html?clearEndpoint=0&intent=shareville");

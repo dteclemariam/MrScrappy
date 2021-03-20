@@ -6,8 +6,6 @@ import java.util.concurrent.TimeUnit;
 public class AppVariable {
 
     /*** --------------- Class variables------ ***/
-    private Resources resources = new Resources();
-    private WebDriver driver = null;
 
         /*** Variable for the random wait time ***/
     private final int minimumMilliseconds = 3000;
