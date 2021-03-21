@@ -10,27 +10,27 @@ public class Resources {
 
 /***---------------- class variables ---------------***/
     /*** Paths ***/
-    private final Path webpageFilePath = Paths.get("C:\\Resources\\Data\\webpages.txt");
-    private final Path webdriverFilePath = Paths.get("C:\\Resources\\Drivers\\chromedriver.exe");
+    private final String webpageFilePath = "src/main/resources/Data/webpages.txt";
+    private final String webdriverFilePath = "src/main/resources/Drivers/chromedriver.exe";
 
     /*** Getters ***/
-    protected Path getWebpageFilePath() {
+    protected String getWebpageFilePath() {
         return webpageFilePath;
     }
 
-    protected Path getWebdriverFilePath() {
+    protected String getWebdriverFilePath() {
         return webdriverFilePath;
     }
 
     /***-------------- Class methods -----------------***/
 
     //Returns false if file doesn't exist or is empty
-    public boolean fileNotEmpty(Path path){
-        File file = new File(path.toString());
+    public boolean fileNotEmpty(String path){
+        File file = new File(path);
         if (file.length() != 0){
             return true;
         }  {
-            throw new RuntimeException("Error: File at " + path.toString() + " is empty, or doesn't exist");
+            throw new RuntimeException("Error: File at " + path + " is empty, or doesn't exist");
         }
     }
 
@@ -41,7 +41,7 @@ public class Resources {
         BufferedReader reader = null;
 
         try{
-            reader = new BufferedReader(new FileReader(webpageFilePath.toString()));
+            reader = new BufferedReader(new FileReader(webpageFilePath));
             webpage = reader.readLine();
         }catch (IOException e){
             System.out.println("An error occurred while trying to read the file");
@@ -60,35 +60,22 @@ public class Resources {
     //Creates and returns instance of Webdriver
     public WebDriver getWebDriver() {
         fileNotEmpty(webdriverFilePath);
-        System.setProperty("webdriver.chrome.driver", webdriverFilePath.toString());
+        System.setProperty("webdriver.chrome.driver", webdriverFilePath);
         WebDriver driver = null;
         try {
             driver = new ChromeDriver();
-            System.out.println("creates driver");
         }catch (Exception e){
             System.out.println("Execution failed: Cannot run program at " + System.getProperty("webdriver.chrome.driver")
                     + ": is not a valid chromedriver application" );
             e.printStackTrace();
         }
-        System.out.println("Returns driver");
         return driver;
     }    //Creates and returns instance of Webdriver
 
-    public void openWebdriver() {
-        fileNotEmpty(webdriverFilePath);
-        System.setProperty("webdriver.chrome.driver", webdriverFilePath.toString());
-        WebDriver driver = null;
-        try {
-            //System.setProperty("webdriver.chrome.driver", webdriverFilePath.toString());
-            driver = new ChromeDriver();
-            System.out.println("creates driver");
-            driver.get("https://www.vg.no/");
-            System.out.println("vg");
-        }catch (Exception e){
-            System.out.println("Execution failed: Cannot run program at " + System.getProperty("webdriver.chrome.driver")
-                    + ": is not a valid chromedriver application" );
-            e.printStackTrace();
-        }
+
+    //Quit Webddriver
+    public void quitWebdriver(WebDriver driver) {
+        driver.quit();
     }
 }
 

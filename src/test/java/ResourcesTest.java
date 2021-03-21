@@ -1,12 +1,13 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @DisplayName("Resources should:")
@@ -14,7 +15,7 @@ class ResourcesTest {
 
     Resources resources = new Resources();
 
-    @DisplayName("Webdriver and webpages.txt exist and is not empty")
+    @DisplayName("FileNotEmpty returns true if file exists and is not empty")
     @Test
     void filesExist() {
                 assertAll(
@@ -27,24 +28,24 @@ class ResourcesTest {
     @Test
     void throwsExceptionIfFilesNotFoundOrIsEmpty() {
         try {
-            Path wrongPath = Paths.get("C:\\Resources\\Data\\wwwebpages.txt");
+            String wrongPath = "src/maaaaaaiiiiin/resources/Data/webpagessssss.txt";
             Throwable errorFileDoesntExist = assertThrows(RuntimeException.class,
                     () -> resources.fileNotEmpty(wrongPath));
 
             File tempEmptyFile = File.createTempFile("tempEmptyFile", "txt");
-            Path pathToEmptyFile = Paths.get(tempEmptyFile.getPath());
+            String pathToEmptyFile = Paths.get(tempEmptyFile.getPath()).toString();
             Throwable errorFileIsEmpty = assertThrows(RuntimeException.class,
                     () -> resources.fileNotEmpty(pathToEmptyFile));
 
             assertAll(
-                    () -> assertEquals("Error: File at " + wrongPath.toString()
+                    () -> assertEquals("Error: File at " + wrongPath
                             + " is empty, or doesn't exist", errorFileDoesntExist.getMessage()),
-                    () -> assertEquals("Error: File at " + pathToEmptyFile.toString()
+                    () -> assertEquals("Error: File at " + pathToEmptyFile
                             + " is empty, or doesn't exist", errorFileIsEmpty.getMessage())
             );
 
             try {
-                tempEmptyFile.delete();
+                Files.deleteIfExists(Paths.get(tempEmptyFile.getPath()));
             } catch (SecurityException e) {
                 System.out.println(e.getMessage());
             }
@@ -69,7 +70,16 @@ class ResourcesTest {
     void returnsWebDriverInstance() {
         WebDriver driver = resources.getWebDriver();
         assertNotNull(driver);
-        driver.close();
+        driver.quit();
+    }
+
+    @DisplayName("Quit Webdriver")
+    @Test
+    void quitWebdriver(){
+        WebDriver driver = resources.getWebDriver();
+        driver.get("https://www.google.com/");
+        resources.quitWebdriver(driver);
+        assertEquals(null, ((RemoteWebDriver)driver).getSessionId());
     }
 
 

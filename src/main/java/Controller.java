@@ -20,13 +20,12 @@ public class Controller {
         appVariable.randomWaitTime();
         driver.get(resources.getWebpage());
         //logIn.logIn(driver);
-        //driver.get("https://classic.nordnet.no/mux/login/startNO.html?clearEndpoint=0&intent=shareville");
         appVariable.randomWaitTime();
         stopApp();
       }
 
       protected void stopApp(){
-          //resources.closeWebdriver(driver);
+          resources.quitWebdriver(driver);
           exit();
       }
 
