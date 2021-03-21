@@ -58,17 +58,19 @@ class ResourcesTest {
     }
 
 
-    @DisplayName("Returns String with URL")
+    @DisplayName("Returns String with URL and String not empty")
     @Test
     void returnStringWithUrl() {
         String url = resources.getWebpage();
-        assertNotNull(url);
+        assertTrue(url instanceof String);
+        assertNotEquals("", url);
     }
 
     @DisplayName("Returns a webdriver to calling method")
     @Test
     void returnsWebDriverInstance() {
         WebDriver driver = resources.getWebDriver();
+        assertTrue(driver instanceof WebDriver);
         assertNotNull(driver);
         driver.quit();
     }
