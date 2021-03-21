@@ -73,7 +73,7 @@ class ResourcesTest {
         driver.quit();
     }
 
-    @DisplayName("Quit Webdriver")
+    @DisplayName("Quit webdriver closes browser window")
     @Test
     void quitWebdriver(){
         WebDriver driver = resources.getWebDriver();
